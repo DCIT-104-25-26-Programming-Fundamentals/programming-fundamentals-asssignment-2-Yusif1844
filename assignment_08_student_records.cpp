@@ -83,3 +83,132 @@
 #include <iomanip>
 using namespace std;
 
+struct Student {
+    string name;
+    int id;
+    vector<double> scores;
+};
+
+// Computes the average of a student's scores. Returns 0 if there are none.
+double calculateAverage(const Student& student) {
+    if (student.scores.empty()) {
+        return 0.0;
+    }
+
+    double sum = 0.0;
+    for (double score : student.scores) {
+        sum += score;
+    }
+
+    return sum / student.scores.size();
+}
+
+// FEATURE 1: Collects a new student's details and adds them to the list.
+void addStudent(vector<Student>& students) {
+    Student newStudent;
+
+    cout << "Student name: ";
+    getline(cin, newStudent.name);
+
+    cout << "Student ID: ";
+    cin >> newStudent.id;
+
+    int numScores;
+    cout << "How many scores? ";
+    cin >> numScores;
+
+    for (int i = 0; i < numScores; i++) {
+        double score;
+        cout << "Enter score " << (i + 1) << ": ";
+        cin >> score;
+        newStudent.scores.push_back(score);
+    }
+    cin.ignore(); // discard leftover newline before any future getline
+
+    students.push_back(newStudent);
+    cout << "Student \"" << newStudent.name << "\" added successfully." << endl;
+}
+
+// FEATURE 2: Displays a formatted table of every student's name, ID,
+// individual scores, and average.
+void displayAllStudents(const vector<Student>& students) {
+    if (students.empty()) {
+        cout << "No students have been added yet." << endl;
+        return;
+    }
+
+    cout << fixed << setprecision(2);
+
+    for (const Student& student : students) {
+        cout << "----------------------------------------" << endl;
+        cout << "Name: " << student.name << endl;
+        cout << "ID:   " << student.id << endl;
+
+        cout << "Scores: ";
+        for (size_t i = 0; i < student.scores.size(); i++) {
+            cout << student.scores[i];
+            if (i != student.scores.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << endl;
+
+        cout << "Average: " << calculateAverage(student) << endl;
+    }
+    cout << "----------------------------------------" << endl;
+}
+
+// FEATURE 3: Finds a student by ID and prints their average score.
+// Prints an error message if the ID is not found.
+void calculateAverageForId(const vector<Student>& students, int id) {
+    for (const Student& student : students) {
+        if (student.id == id) {
+            cout << fixed << setprecision(2);
+            cout << student.name << "'s average score: "
+                 << calculateAverage(student) << endl;
+            return;
+        }
+    }
+
+    cout << "Error: No student found with ID " << id << "." << endl;
+}
+
+int main() {
+    vector<Student> students;
+    int choice;
+    bool running = true;
+
+    while (running) {
+        cout << "================================" << endl;
+        cout << "   STUDENT RECORD SYSTEM MENU" << endl;
+        cout << "================================" << endl;
+        cout << "1. Add student" << endl;
+        cout << "2. Display all students" << endl;
+        cout << "3. Calculate average score" << endl;
+        cout << "4. Quit" << endl;
+        cout << "Enter your choice (1-4): ";
+        cin >> choice;
+        cin.ignore(); // discard leftover newline before getline calls
+        cout << endl;
+
+        if (choice == 1) {
+            addStudent(students);
+        } else if (choice == 2) {
+            displayAllStudents(students);
+        } else if (choice == 3) {
+            int id;
+            cout << "Enter student ID: ";
+            cin >> id;
+            calculateAverageForId(students, id);
+        } else if (choice == 4) {
+            cout << "Goodbye!" << endl;
+            running = false;
+        } else {
+            cout << "Error: Invalid choice. Please enter a number from 1 to 4." << endl;
+        }
+
+        cout << endl;
+    }
+
+    return 0;
+}
