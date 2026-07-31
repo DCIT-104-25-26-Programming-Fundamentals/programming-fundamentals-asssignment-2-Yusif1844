@@ -73,3 +73,107 @@
 #include <cmath>
 using namespace std;
 
+double add(double a, double b) {
+    return a + b;
+}
+
+double subtract(double a, double b) {
+    return a - b;
+}
+
+double multiply(double a, double b) {
+    return a * b;
+}
+
+// Returns true and sets result if the division succeeds.
+// Returns false if b is zero (division not performed).
+bool divide(double a, double b, double& result) {
+    if (b == 0) {
+        return false;
+    }
+    result = a / b;
+    return true;
+}
+
+// Returns true and sets result if the modulus succeeds.
+// Returns false if b is zero (modulus not performed).
+bool computeModulus(double a, double b, double& result) {
+    if (b == 0) {
+        return false;
+    }
+    result = fmod(a, b);
+    return true;
+}
+
+double exponentiation(double base, double exponent) {
+    return pow(base, exponent);
+}
+
+int main() {
+    int choice;
+    bool running = true;
+
+    while (running) {
+        cout << "============================" << endl;
+        cout << "     SIMPLE CALCULATOR" << endl;
+        cout << "============================" << endl;
+        cout << "1. Addition" << endl;
+        cout << "2. Subtraction" << endl;
+        cout << "3. Multiplication" << endl;
+        cout << "4. Division" << endl;
+        cout << "5. Modulus" << endl;
+        cout << "6. Exponentiation" << endl;
+        cout << "7. Quit" << endl;
+        cout << "Select an operation (1-7): ";
+        cin >> choice;
+        cout << endl;
+
+        if (choice == 7) {
+            cout << "Goodbye!" << endl;
+            running = false;
+            continue;
+        }
+
+        if (choice < 1 || choice > 6) {
+            cout << "Error: Invalid choice. Please select a number from 1 to 7." << endl;
+            cout << endl;
+            continue;
+        }
+
+        double a, b;
+        cout << "Enter first number : ";
+        cin >> a;
+        cout << "Enter second number: ";
+        cin >> b;
+
+        cout << fixed << setprecision(2);
+
+        if (choice == 1) {
+            cout << "Result: " << a << " + " << b << " = " << add(a, b) << endl;
+        } else if (choice == 2) {
+            cout << "Result: " << a << " - " << b << " = " << subtract(a, b) << endl;
+        } else if (choice == 3) {
+            cout << "Result: " << a << " * " << b << " = " << multiply(a, b) << endl;
+        } else if (choice == 4) {
+            double result;
+            if (divide(a, b, result)) {
+                cout << "Result: " << a << " / " << b << " = " << result << endl;
+            } else {
+                cout << "Error: Cannot divide by zero." << endl;
+            }
+        } else if (choice == 5) {
+            double result;
+            if (computeModulus(a, b, result)) {
+                cout << "Result: " << a << " % " << b << " = " << result << endl;
+            } else {
+                cout << "Error: Cannot compute modulus with zero." << endl;
+            }
+        } else if (choice == 6) {
+            cout << "Result: " << a << " ^ " << b << " = " << exponentiation(a, b) << endl;
+        }
+
+        cout << endl;
+    }
+
+    return 0;
+}
